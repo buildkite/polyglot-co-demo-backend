@@ -2,7 +2,7 @@ steps:
 
   - name: ":docker::package:"
     plugins:
-      docker-compose#2db7f2b:
+      docker-compose#3550ba9:
         build: app
         build-script: "make docker"
 
