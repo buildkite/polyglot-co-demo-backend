@@ -1,0 +1,12 @@
+FROM centurylink/ca-certs
+
+EXPOSE 8080
+
+# Expects `make` to have been run and the binary available
+COPY polyglot-co-demo-backend /
+ADD templates /templates
+ADD static /static
+
+WORKDIR /
+
+ENTRYPOINT ["/polyglot-co-demo-backend"]

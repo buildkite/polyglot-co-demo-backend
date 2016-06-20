@@ -1,11 +1,9 @@
-FROM centurylink/ca-certs
+FROM golang:1.6
 
 EXPOSE 8080
 
-COPY polyglot-co-demo-backend /
-ADD templates /templates
-ADD static /static
+ADD . /go/src/github.com/buildkite/polyglot-co-demo-backend
 
-WORKDIR /
+WORKDIR /go/src/github.com/buildkite/polyglot-co-demo-backend
 
-ENTRYPOINT ["/polyglot-co-demo-backend"]
+CMD ["go","run","main.go"]
