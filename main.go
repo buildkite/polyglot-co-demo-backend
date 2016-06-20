@@ -1,4 +1,4 @@
-package main
+package main // import "github.com/buildkite/polyglot-co-demo-backend"
 
 import (
 	"net/http"

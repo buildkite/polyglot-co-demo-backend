@@ -2,12 +2,13 @@ steps:
 
   - name: ":docker::package:"
     plugins:
-      docker-compose:
+      docker-compose#2db7f2b:
         build: app
+        build-script: "make docker"
 
   - wait
 
-  - name: ":golang:%n"
+  - name: ":golang:"
     command: "go test"
     parallelism: 10
     plugins:
