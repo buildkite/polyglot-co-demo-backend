@@ -1,0 +1,15 @@
+steps:
+
+  - name: ":docker::package:"
+    plugins:
+      docker-compose:
+        build: app
+
+  - wait
+
+  - name: ":golang:%n"
+    command: "go test"
+    parallelism: 10
+    plugins:
+      docker-compose:
+        run: app

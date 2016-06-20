@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    environment:
+      BUILDKITE_BUILD_NUMBER:
+      FORECAST_ENDPOINT_URL:
+      GIN_MODE:
+    ports:
+     - "8080:8080"
