@@ -17,3 +17,14 @@ steps:
     plugins:
       docker-compose:
         run: app
+
+  - wait
+
+  - trigger: "backend-deploy"
+    label: ":shipit:"
+    branches: "master"
+    async: true
+    build:
+      message: ${BUILDKITE_MESSAGE}
+      commit: ${BUILDKITE_COMMIT}
+      branch: ${BUILDKITE_BRANCH}

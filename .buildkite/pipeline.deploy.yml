@@ -1,0 +1,5 @@
+steps:
+  - name: ":rocket:"
+    command: ".buildkite/steps/deploy.bash"
+    agents:
+      queue: elastic
