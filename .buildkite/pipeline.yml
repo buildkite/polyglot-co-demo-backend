@@ -1,6 +1,8 @@
 steps:
 
   - name: ":docker::package:"
+    agents:
+      queue: elastic
     plugins:
       docker-compose:
         build: app
@@ -10,6 +12,8 @@ steps:
   - name: ":golang:"
     command: "go test"
     parallelism: 10
+    agents:
+      queue: elastic
     plugins:
       docker-compose:
         run: app
