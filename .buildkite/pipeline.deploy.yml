@@ -3,3 +3,4 @@ steps:
     command: ".buildkite/steps/deploy.bash"
     agents:
       queue: elastic
+    artifact_paths: "eb.zip;eb/*"
