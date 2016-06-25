@@ -18,9 +18,9 @@ For example:
 
 `WEATHER_SERVICE_URL=https://cbz123.execute-api.ap-southeast-2.amazonaws.com/prod/polyglot-co-weather_fetchWeather`
 
-## Allow the agent to write to the EB app’s S3 bucket
+## Allow the agent to deploy the EB app
 
-We need to give permission for the agent to upload a new version of the backend to the EB application’s S3 bucket. To do this, find the bucket name (such as `elasticbeanstalk-ap-southeast-2-534940912648`), and then add an Inline Policy to your agent role that allows it to write to this bucket under the `/deploys/*` key.
+We need to give permission for the agent to upload a new version of the backend to the EB application’s S3 bucket, and create new versions. To do this, find the bucket name (such as `elasticbeanstalk-ap-southeast-2-534940912648`) and the ARN of the application, and then add an Inline Policy to your agent role that allows it to write to the S3 bucket under the `/deploys/*` key, and create versions and update the environment.
 
 ```json
 {
@@ -29,9 +29,21 @@ We need to give permission for the agent to upload a new version of the backend 
     {
       "Effect": "Allow",
       "Action": [
-        "s3:PutObject"
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket"
       ],
       "Resource": ["arn:aws:s3:::elasticbeanstalk-ap-southeast-2-534940912648/deploys/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "elasticbeanstalk:CreateApplicationVersion",
+        "elasticbeanstalk:UpdateEnvironment"
+      ],
+      "Resource": [
+        "arn:aws:elasticbeanstalk:ap-southeast-2:534940912648:*"
+      ]
     }
   ]
 }
@@ -49,6 +61,7 @@ For the deploy pipeline you need to expose some config and secrets in the enviro
 export S3_EB_APP_BUCKET_NAME="<elastic-beanstalk-app-s3-bucket>"
 export EB_REGION="<elastic-beanstalk-app-region>"
 export EB_APP_NAME="<elastic-beanstalk-app-name>"
+export EB_ENVIRONMENT_NAME="<elastic-beanstalk-environment-name>"
 ```
 
 for example:
@@ -57,7 +70,9 @@ for example:
 #!/bin/bash
 
 export S3_EB_APP_BUCKET_NAME="elasticbeanstalk-ap-southeast-2-534940912648"
+export EB_REGION="ap-southeast-2"
 export EB_APP_NAME="polyglot-co"
+export EB_ENVIRONMENT_NAME="polyglotco"
 ```
 
 ## Test the Backend pipeline
