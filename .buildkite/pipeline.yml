@@ -2,7 +2,7 @@ steps:
 
   - name: ":docker::package:"
     agents:
-      queue: $BUILDKITE_AGENT_META_DATA_QUEUE
+      queue: ${BUILDKITE_AGENT_META_DATA_QUEUE}
     plugins:
       docker-compose:
         build: app
@@ -13,14 +13,14 @@ steps:
     command: "go test"
     parallelism: 10
     agents:
-      queue: $BUILDKITE_AGENT_META_DATA_QUEUE
+      queue: ${BUILDKITE_AGENT_META_DATA_QUEUE}
     plugins:
       docker-compose:
         run: app
 
   - wait
 
-  - trigger: "backend-deploy"
+  - trigger: "${BUILDKITE_PIPELINE_SLUG}-deploy"
     label: ":shipit:"
     branches: "master"
     async: true
