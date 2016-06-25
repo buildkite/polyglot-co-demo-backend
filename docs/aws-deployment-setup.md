@@ -47,6 +47,7 @@ For the deploy pipeline you need to expose some config and secrets in the enviro
 #!/bin/bash
 
 export S3_EB_APP_BUCKET_NAME="<elastic-beanstalk-app-s3-bucket>"
+export EB_REGION="<elastic-beanstalk-app-region>"
 export EB_APP_NAME="<elastic-beanstalk-app-name>"
 ```
 
