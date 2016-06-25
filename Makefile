@@ -1,5 +1,7 @@
 .PHONY=clean
 
+SHELL=/bin/bash -o pipefail
+
 default: polyglot-co-demo-backend
 
 polyglot-co-demo-backend:
