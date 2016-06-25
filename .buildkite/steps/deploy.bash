@@ -6,7 +6,7 @@ echo "--- :elasticbeanstalk: Creating zip for Elastic Beanstalk"
 
 make eb.zip
 
-echo "--- :elasticbeanstalk: Deploying to Elastic Beanstalk"
+echo "+++ :elasticbeanstalk: Deploying to Elastic Beanstalk"
 
 export AWS_REGION="${EB_REGION}"
 
