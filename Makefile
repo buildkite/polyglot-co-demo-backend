@@ -6,7 +6,6 @@ polyglot-co-demo-backend:
 	docker run --rm \
 	  -v "$$(pwd):/src" \
 	  -v /var/run/docker.sock:/var/run/docker.sock \
-	  -e COMPRESS_BINARY=true \
 	  centurylink/golang-builder
 
 eb.zip: polyglot-co-demo-backend
