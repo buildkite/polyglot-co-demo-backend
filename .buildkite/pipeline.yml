@@ -11,7 +11,7 @@ steps:
 
   - name: ":golang:"
     command: "go test"
-    parallelism: 10
+    parallelism: ${TEST_PARALLELISM:-10}
     agents:
       queue: ${BUILDKITE_AGENT_META_DATA_QUEUE}
     plugins:
