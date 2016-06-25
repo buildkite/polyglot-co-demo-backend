@@ -2,7 +2,7 @@ steps:
 
   - name: ":docker::package:"
     agents:
-      queue: elastic
+      queue: $BUILDKITE_AGENT_META_DATA_QUEUE
     plugins:
       docker-compose:
         build: app
@@ -13,7 +13,7 @@ steps:
     command: "go test"
     parallelism: 10
     agents:
-      queue: elastic
+      queue: $BUILDKITE_AGENT_META_DATA_QUEUE
     plugins:
       docker-compose:
         run: app

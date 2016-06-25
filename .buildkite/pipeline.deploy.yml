@@ -2,5 +2,5 @@ steps:
   - name: ":rocket:"
     command: ".buildkite/steps/deploy.bash"
     agents:
-      queue: elastic
+      queue: $BUILDKITE_AGENT_META_DATA_QUEUE
     artifact_paths: "eb.zip;eb/*"
