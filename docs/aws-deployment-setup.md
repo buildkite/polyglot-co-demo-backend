@@ -31,7 +31,10 @@ We need to give permission for the agent to upload a new version of the backend 
       "Action": [
         "s3:*"
       ],
-      "Resource": ["arn:aws:s3:::elasticbeanstalk-ap-southeast-2-534940912648/deploys/*"]
+      "Resource": [
+        "arn:aws:s3:::elasticbeanstalk-ap-southeast-2-534940912648",
+        "arn:aws:s3:::elasticbeanstalk-ap-southeast-2-534940912648/*"
+      ]
     },
     {
       "Effect": "Allow",
