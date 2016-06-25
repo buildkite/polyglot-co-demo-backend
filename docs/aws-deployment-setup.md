@@ -20,35 +20,7 @@ For example:
 
 ## Allow the agent to deploy the EB app
 
-We need to give permission for the agent to upload a new version of the backend to the EB application’s S3 bucket, and create new versions. To do this, find the bucket name (such as `elasticbeanstalk-ap-southeast-2-534940912648`) and the ARN of the application, and then add an Inline Policy to your agent role that allows it to write to the S3 bucket under the `/deploys/*` key, and create versions and update the environment.
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:*"
-      ],
-      "Resource": [
-        "arn:aws:s3:::elasticbeanstalk-ap-southeast-2-534940912648",
-        "arn:aws:s3:::elasticbeanstalk-ap-southeast-2-534940912648/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "elasticbeanstalk:CreateApplicationVersion",
-        "elasticbeanstalk:UpdateEnvironment"
-      ],
-      "Resource": [
-        "arn:aws:elasticbeanstalk:ap-southeast-2:534940912648:*"
-      ]
-    }
-  ]
-}
-```
+We need to give permission for the agent to upload a new version of the backend to the EB application’s S3 bucket, and create new versions. To do this with granular permissions is a total pain, so simply attach the `AWSElasticBeanstalkFullAccess` policy to the buildkite agent IAM role.
 
 ## Upload the pipeline environment hook to S3
 
