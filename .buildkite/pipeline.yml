@@ -18,7 +18,8 @@ steps:
       docker-compose:
         run: app
 
-  - wait
+  - block: ":rocket: Deploy to production"
+    branches: "master"
 
   - trigger: "${BUILDKITE_PIPELINE_SLUG}-deploy"
     label: ":shipit:"
