@@ -56,7 +56,7 @@ func fetchForecasts() gin.H {
     {"name": "Tokyo",      "lat": "...", "lng": "..."},
   }
 
-  if weatherServiceUrl == "" {
+  // if weatherServiceUrl == "" {
     // Generate some dummy data
     return gin.H{
       "forecasts": []gin.H{
@@ -67,7 +67,7 @@ func fetchForecasts() gin.H {
       },
       "build": "42",
     }
-  } else {
+  // } else {
     // TODO:
     //
     // POST ${weatherServiceUrl}
@@ -94,7 +94,7 @@ func fetchForecasts() gin.H {
     //     {"name": "A City", "high":}
     //   ]
     // }
-    return gin.H{}
+    // return gin.H{}
   }
 }
 
