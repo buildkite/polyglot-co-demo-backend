@@ -18,10 +18,10 @@ export default class PolyglotCo extends React.Component {
 
   componentDidMount() {
     this._fetchForecasts();
-    setInterval(() => { this._fetchForecasts() }, 1000);
+    setInterval(() => { this._fetchForecasts() }, 3000);
 
     this._fetchBackendBuild();
-    setInterval(() => { this._fetchBackendBuild() }, 1000);
+    setInterval(() => { this._fetchBackendBuild() }, 3000);
   }
 
   render() {
