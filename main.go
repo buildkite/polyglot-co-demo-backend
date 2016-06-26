@@ -1,8 +1,10 @@
 package main // import "github.com/buildkite/polyglot-co-demo-backend"
 
 import (
+  "io/ioutil"
 	"net/http"
 	"os"
+  "strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,10 +58,11 @@ func fetchForecasts() gin.H {
 }
 
 func buildNumber() string {
-  build := os.Getenv("BUILDKITE_BUILD_NUMBER")
-  if build == "" {
+  number, err := ioutil.ReadFile("static/build-number")
+
+  if err != nil {
     return "42"
   } else {
-    return build
+    return strings.TrimSpace(string(number))
   }
 }
