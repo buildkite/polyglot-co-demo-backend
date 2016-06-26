@@ -47,7 +47,7 @@ func scriptPath() string {
 }
 
 func fetchForecasts() gin.H {
-  weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
+  //weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
 
   cities := []gin.H{
     {"name": "Auckland",   "lat": "...", "lng": "..."},
@@ -95,7 +95,7 @@ func fetchForecasts() gin.H {
     //   ]
     // }
     // return gin.H{}
-  }
+  // }
 }
 
 func buildNumber() string {
