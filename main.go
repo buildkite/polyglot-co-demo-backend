@@ -2,6 +2,7 @@ package main // import "github.com/buildkite/polyglot-co-demo-backend"
 
 import (
   "io/ioutil"
+  "math/rand"
 	"net/http"
 	"os"
   "strings"
@@ -46,14 +47,54 @@ func scriptPath() string {
 }
 
 func fetchForecasts() gin.H {
-  return gin.H{
-    "forecasts": []gin.H{
-      {"name": "Auckland",   "high": 18, "forecast": "Sunny, clear skies with a chance of rain"},
-      {"name": "Wellington", "high": 19, "forecast": "Morning rain clearing to a sunny afternoon"},
-      {"name": "Milan",      "high": 32, "forecast": "Hot afternoon with chance of showers"},
-      {"name": "Tokyo",      "high": 27, "forecast": "Cloudy periods with heavy rain in the evening"},
-    },
-    "build": "42",
+  weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
+
+  cities := []gin.H{
+    {"name": "Auckland",   "lat": "...", "lng": "..."},
+    {"name": "Wellington", "lat": "...", "lng": "..."},
+    {"name": "Milan",      "lat": "...", "lng": "..."},
+    {"name": "Tokyo",      "lat": "...", "lng": "..."},
+  }
+
+  if weatherServiceUrl == "" {
+    // Generate some dummy data
+    return gin.H{
+      "forecasts": []gin.H{
+        {"name": cities[0]["name"], "high": rand.Intn(40), "forecast": "Sunny, clear skies with a chance of rain"},
+        {"name": cities[1]["name"], "high": rand.Intn(40), "forecast": "Morning rain clearing to a sunny afternoon"},
+        {"name": cities[2]["name"], "high": rand.Intn(40), "forecast": "Hot afternoon with chance of showers"},
+        {"name": cities[3]["name"], "high": rand.Intn(40), "forecast": "Cloudy periods with heavy rain in the evening"},
+      },
+      "build": "42",
+    }
+  } else {
+    // TODO:
+    //
+    // POST ${weatherServiceUrl}
+    // {
+    //   "locations": [
+    //     { "lat": "...", "lng": "..." },
+    //     { "lat": "...", "lng": "..." }
+    //   ]
+    // }
+    //
+    // which returns:
+    //
+    // {
+    //   "forecasts": [
+    //     { "high": 1.2, "summary": "Sunny with a chance..."},
+    //     { "high": 1.2, "summary": "Sunny with a chance..."}
+    //   ]
+    // }
+    //
+    // and then we transform into:
+    //
+    // {
+    //   "forecasts": [
+    //     {"name": "A City", "high":}
+    //   ]
+    // }
+    return gin.H{}
   }
 }
 
