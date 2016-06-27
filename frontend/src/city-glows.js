@@ -13,7 +13,7 @@ export default class CityGlows extends React.Component {
     return (
       <svg viewBox="0 0 100 100" style={{width:"100%",height:"100%"}} className="absolute top-0 left-0 z0">
         <defs>
-          {this._radialGradient("cold", "#8DE8FB")}
+          {this._radialGradient("cold", "#D2F2FB")}
           {this._radialGradient("cool", "#14C0EB")}
           {this._radialGradient("warm", "#EBBD2B")}
           {this._radialGradient("hot",  "#FF8321")}
@@ -49,11 +49,11 @@ export default class CityGlows extends React.Component {
   }
 
   _radialGradientId(temperature) {
-    if (temperature < 15) {
+    if (temperature < 10) {
       return "#city-glows-gradient-cold";
-    } else if (temperature < 25) {
+    } else if (temperature < 20) {
       return "#city-glows-gradient-cool";
-    } else if (temperature < 25) {
+    } else if (temperature < 30) {
       return "#city-glows-gradient-warm";
     } else {
       return "#city-glows-gradient-hot";
