@@ -1,11 +1,11 @@
 package main // import "github.com/buildkite/polyglot-co-demo-backend"
 
 import (
-  "io/ioutil"
-  "math/rand"
+	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"os"
-  "strings"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,87 +23,115 @@ func main() {
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl.html", gin.H{
-      "script": scriptPath(),
-    })
+			"script": scriptPath(),
+		})
 	})
 
 	r.GET("/build", func(c *gin.Context) {
-    c.JSON(200, gin.H{"build": buildNumber()})
-  })
+		c.JSON(200, gin.H{"build": buildNumber()})
+	})
 
 	r.GET("/forecasts", func(c *gin.Context) {
-    c.JSON(200, fetchForecasts())
-  })
+		forecastReq := ForecastRequest{
+			Locations: []ForecastRequestLocation{
+				{"Auckland", "36.8485", "174.7633"},
+				{"Wellington", "41.2865", "174.7762"},
+				{"Milan", "45.4654", "9.1859"},
+				{"Tokyo", "35.6895", "139.6917"},
+				{"Melbourne", "37.8163", "144.9642"},
+				{"London", "51.5074", "0.1278"},
+				{"Tel Aviv", "32.0853", "34.7818"},
+			},
+		}
+
+		forecastResp, err := fetchForecasts(forecastReq)
+
+		if err == nil {
+			c.JSON(200, forecastResp)
+		} else {
+			c.JSON(500, gin.H{ "error": err.Error() })
+		}
+	})
 
 	r.Run(":" + port)
 }
 
 func scriptPath() string {
-  if os.Getenv("FRONTEND_DEV") == "true" {
-    return "http://localhost:8000/polyglot-co.js"
-  } else {
-    return "/static/polyglot-co.js"
-  }
+	if os.Getenv("FRONTEND_DEV") == "true" {
+		return "http://localhost:8000/polyglot-co.js"
+	} else {
+		return "/static/polyglot-co.js"
+	}
 }
 
-func fetchForecasts() gin.H {
-  //weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
+type ForecastRequest struct {
+	Locations []ForecastRequestLocation `json:"locations"`
+}
 
-  cities := []gin.H{
-    {"name": "Auckland",   "lat": "...", "lng": "..."},
-    {"name": "Wellington", "lat": "...", "lng": "..."},
-    {"name": "Milan",      "lat": "...", "lng": "..."},
-    {"name": "Tokyo",      "lat": "...", "lng": "..."},
-  }
+type ForecastRequestLocation struct {
+	Name string `json:"name"`
+	Lat  string `json:"lat"`
+	Lng  string `json:"lng"`
+}
 
-  // if weatherServiceUrl == "" {
-    // Generate some dummy data
-    return gin.H{
-      "forecasts": []gin.H{
-        {"name": cities[0]["name"], "high": rand.Intn(40), "forecast": "Sunny, clear skies with a chance of rain"},
-        {"name": cities[1]["name"], "high": rand.Intn(40), "forecast": "Morning rain clearing to a sunny afternoon"},
-        {"name": cities[2]["name"], "high": rand.Intn(40), "forecast": "Hot afternoon with chance of showers"},
-        {"name": cities[3]["name"], "high": rand.Intn(40), "forecast": "Cloudy periods with heavy rain in the evening"},
-      },
-      "build": "42",
-    }
-  // } else {
-    // TODO:
-    //
-    // POST ${weatherServiceUrl}
-    // {
-    //   "locations": [
-    //     { "lat": "...", "lng": "..." },
-    //     { "lat": "...", "lng": "..." }
-    //   ]
-    // }
-    //
-    // which returns:
-    //
-    // {
-    //   "forecasts": [
-    //     { "high": 1.2, "summary": "Sunny with a chance..."},
-    //     { "high": 1.2, "summary": "Sunny with a chance..."}
-    //   ]
-    // }
-    //
-    // and then we transform into:
-    //
-    // {
-    //   "forecasts": [
-    //     {"name": "A City", "high":}
-    //   ]
-    // }
-    // return gin.H{}
-  // }
+type ForecastResponse struct {
+	Forecasts []Forecast `json:"forecasts"`
+	Build     string     `json:"build"`
+}
+
+type Forecast struct {
+	Name     string  `json:"name"`
+	Lat      string  `json:"lat"`
+	Lng      string  `json:"lng"`
+	High     float32 `json:"high"`
+	Forecast string  `json:"forecast"`
+}
+
+func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
+	// weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
+
+	// if weatherServiceUrl == "" {
+		return dummyResponse(req), nil
+	// } else {
+	// 	return ForecastResponse{
+	// 		Forecasts: []Forecast{},
+	// 		Build:     "42",
+	// 	}, nil
+	// }
+}
+
+func dummyResponse(req ForecastRequest) ForecastResponse {
+	return ForecastResponse{
+		Forecasts: []Forecast{
+			{req.Locations[0].Name, req.Locations[0].Lat, req.Locations[0].Lng, float32(rand.Intn(40)), "Sunny, clear skies with a chance of rain"},
+			{req.Locations[1].Name, req.Locations[1].Lat, req.Locations[1].Lng, float32(rand.Intn(40)), "Morning rain clearing to a sunny afternoon"},
+			{req.Locations[2].Name, req.Locations[2].Lat, req.Locations[2].Lng, float32(rand.Intn(40)), "Hot afternoon with chance of showers"},
+			{req.Locations[3].Name, req.Locations[3].Lat, req.Locations[3].Lng, float32(rand.Intn(40)), "Cloudy periods with heavy rain in the evening"},
+		},
+		Build: "42",
+	}
 }
 
 func buildNumber() string {
-  number, err := ioutil.ReadFile("static/build-number")
+	number, err := ioutil.ReadFile("static/build-number")
 
-  if err != nil {
-    return "42"
-  } else {
-    return strings.TrimSpace(string(number))
-  }
+	if err != nil {
+		return "42"
+	} else {
+		return strings.TrimSpace(string(number))
+	}
 }
+
+// func postJSON(url string, json gin.H) (gin.H, error) {
+//   b := new(bytes.Buffer)
+//   json.NewEncoder(b).Encode(u)
+
+//   res, _ := http.Post(url, "application/json; charset=utf-8", b)
+//   var resBody struct {
+//       forecasts map[string]string `json:"forecasts"`
+//       build     string            `json:"build"`
+//   }
+//   json.NewDecoder(res.Body).Decode(&resBody)
+
+//   return response, nil
+// }
