@@ -1,6 +1,9 @@
 package main // import "github.com/buildkite/polyglot-co-demo-backend"
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -49,7 +52,7 @@ func main() {
 		if err == nil {
 			c.JSON(200, forecastResp)
 		} else {
-			c.JSON(500, gin.H{ "error": err.Error() })
+			c.JSON(500, gin.H{"error": err.Error()})
 		}
 	})
 
@@ -88,16 +91,26 @@ type Forecast struct {
 }
 
 func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
-	// weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
+	weatherServiceUrl := os.Getenv("WEATHER_SERVICE_URL")
 
-	// if weatherServiceUrl == "" {
+	if weatherServiceUrl == "" {
 		return dummyResponse(req), nil
-	// } else {
-	// 	return ForecastResponse{
-	// 		Forecasts: []Forecast{},
-	// 		Build:     "42",
-	// 	}, nil
-	// }
+	}
+
+	b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(req)
+
+	res, err := http.Post(weatherServiceUrl, "application/json; charset=utf-8", b)
+	if err != nil {
+		return ForecastResponse{}, err
+	}
+
+	var forecastResp ForecastResponse
+	json.NewDecoder(res.Body).Decode(&forecastResp)
+
+	fmt.Println("%s", forecastResp)
+
+	return forecastResp, nil
 }
 
 func dummyResponse(req ForecastRequest) ForecastResponse {
@@ -121,17 +134,3 @@ func buildNumber() string {
 		return strings.TrimSpace(string(number))
 	}
 }
-
-// func postJSON(url string, json gin.H) (gin.H, error) {
-//   b := new(bytes.Buffer)
-//   json.NewEncoder(b).Encode(u)
-
-//   res, _ := http.Post(url, "application/json; charset=utf-8", b)
-//   var resBody struct {
-//       forecasts map[string]string `json:"forecasts"`
-//       build     string            `json:"build"`
-//   }
-//   json.NewDecoder(res.Body).Decode(&resBody)
-
-//   return response, nil
-// }
