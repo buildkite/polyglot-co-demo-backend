@@ -5,7 +5,7 @@ export default class CityForecast extends React.Component {
   static propTypes = {
     name: React.PropTypes.string.isRequired,
     high: React.PropTypes.number.isRequired,
-    forecast: React.PropTypes.string.isRequired
+    summary: React.PropTypes.string.isRequired
   };
 
   render() {
@@ -17,7 +17,7 @@ export default class CityForecast extends React.Component {
             {`${Math.floor(this.props.high)}°`}
           </p>
         </ReactCSSTransitionGroup>
-        <p className="m0 h4 truncate color-white" style={{marginTop:'7.8rem',paddingBottom:".25em"}}>{this.props.forecast}</p>
+        <p className="m0 h4 truncate color-white" style={{marginTop:'7.8rem',paddingBottom:".25em"}}>{this.props.summary}</p>
       </div>
     )
   }

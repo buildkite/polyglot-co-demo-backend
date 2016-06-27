@@ -25,9 +25,7 @@ func main() {
 	r.Static("/static", "static")
 
 	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl.html", gin.H{
-			"script": scriptPath(),
-		})
+		c.HTML(http.StatusOK, "index.tmpl.html", gin.H{ "script": scriptPath() })
 	})
 
 	r.GET("/build", func(c *gin.Context) {
@@ -55,7 +53,7 @@ func main() {
 		if err == nil {
 			c.JSON(200, forecastResp)
 		} else {
-			c.JSON(500, gin.H{"error": err.Error()})
+			c.JSON(500, gin.H{ "error": err.Error() })
 		}
 	})
 
@@ -89,8 +87,8 @@ type Forecast struct {
 	Name     string  `json:"name"`
 	Lat      string  `json:"lat"`
 	Lng      string  `json:"lng"`
-	High     float32 `json:"high"`
-	Forecast string  `json:"forecast"`
+	High     float64 `json:"high"`
+	Summary  string  `json:"summary"`
 }
 
 func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
@@ -103,6 +101,8 @@ func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(req)
 
+  fmt.Println("Request:\n%s", b)
+
 	res, err := http.Post(weatherServiceUrl, "application/json; charset=utf-8", b)
 	if err != nil {
 		return ForecastResponse{}, err
@@ -111,7 +111,7 @@ func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
 	var forecastResp ForecastResponse
 	json.NewDecoder(res.Body).Decode(&forecastResp)
 
-	fmt.Println("%s", forecastResp)
+	fmt.Println("Response:\n%s", forecastResp)
 
 	return forecastResp, nil
 }
@@ -119,10 +119,10 @@ func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
 func dummyResponse(req ForecastRequest) ForecastResponse {
 	return ForecastResponse{
 		Forecasts: []Forecast{
-			{req.Locations[0].Name, req.Locations[0].Lat, req.Locations[0].Lng, float32(rand.Intn(40)), "Sunny, clear skies with a chance of rain"},
-			{req.Locations[1].Name, req.Locations[1].Lat, req.Locations[1].Lng, float32(rand.Intn(40)), "Morning rain clearing to a sunny afternoon"},
-			{req.Locations[2].Name, req.Locations[2].Lat, req.Locations[2].Lng, float32(rand.Intn(40)), "Hot afternoon with chance of showers"},
-			{req.Locations[3].Name, req.Locations[3].Lat, req.Locations[3].Lng, float32(rand.Intn(40)), "Cloudy periods with heavy rain in the evening"},
+			{req.Locations[0].Name, req.Locations[0].Lat, req.Locations[0].Lng, float64(rand.Intn(40)), "Sunny, clear skies with a chance of rain"},
+			{req.Locations[1].Name, req.Locations[1].Lat, req.Locations[1].Lng, float64(rand.Intn(40)), "Morning rain clearing to a sunny afternoon"},
+			{req.Locations[2].Name, req.Locations[2].Lat, req.Locations[2].Lng, float64(rand.Intn(40)), "Hot afternoon with chance of showers"},
+			{req.Locations[3].Name, req.Locations[3].Lat, req.Locations[3].Lng, float64(rand.Intn(40)), "Cloudy periods with heavy rain in the evening"},
 		},
 		Build: "42",
 	}
