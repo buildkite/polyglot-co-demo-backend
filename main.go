@@ -25,7 +25,7 @@ func main() {
 	r.Static("/static", "static")
 
 	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl.html", gin.H{ "script": scriptPath() })
+		c.HTML(http.StatusOK, "index.tmpl.html", gin.H{"script": scriptPath()})
 	})
 
 	r.GET("/build", func(c *gin.Context) {
@@ -35,16 +35,17 @@ func main() {
 	r.GET("/forecasts", func(c *gin.Context) {
 		forecastReq := ForecastRequest{
 			Locations: []ForecastRequestLocation{
-				{"Auckland", "36.8485", "174.7633"},
-				{"Melbourne", "37.8163", "144.9642"},
-				// {"Wellington", "41.2865", "174.7762"},
-				{"Milan", "45.4654", "9.1859"},
+				{"Auckland", "-36.8485", "174.7633"},
+				// {"Melbourne", "-37.8163", "144.9642"},
+				// {"Wellington", "-41.2865", "174.7762"},
+				// {"Milan", "45.4654", "9.1859"},
+				{"Shanghai", "31.2304", "121.4737"},
 				{"Kraków", "50.0647", "19.9450"},
 				// {"Tokyo", "35.6895", "139.6917"},
 				// {"London", "51.5074", "0.1278"},
 				// {"Tel Aviv", "32.0853", "34.7818"},
 				// {"Dubai", "25.2048", "55.2708"},
-				// {"Berlin", "52.5200", "13.4050"},
+				{"Berlin", "52.5200", "13.4050"},
 			},
 		}
 
@@ -53,7 +54,7 @@ func main() {
 		if err == nil {
 			c.JSON(200, forecastResp)
 		} else {
-			c.JSON(500, gin.H{ "error": err.Error() })
+			c.JSON(500, gin.H{"error": err.Error()})
 		}
 	})
 
@@ -84,11 +85,11 @@ type ForecastResponse struct {
 }
 
 type Forecast struct {
-	Name     string  `json:"name"`
-	Lat      string  `json:"lat"`
-	Lng      string  `json:"lng"`
-	High     float64 `json:"high"`
-	Summary  string  `json:"summary"`
+	Name    string  `json:"name"`
+	Lat     string  `json:"lat"`
+	Lng     string  `json:"lng"`
+	High    float64 `json:"high"`
+	Summary string  `json:"summary"`
 }
 
 func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
@@ -101,7 +102,7 @@ func fetchForecasts(req ForecastRequest) (ForecastResponse, error) {
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(req)
 
-  fmt.Println("Request:\n%s", b)
+	fmt.Println("Request:\n%s", b)
 
 	res, err := http.Post(weatherServiceUrl, "application/json; charset=utf-8", b)
 	if err != nil {
