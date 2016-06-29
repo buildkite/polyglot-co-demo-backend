@@ -5,3 +5,5 @@ steps:
     agents:
       queue: ${BUILDKITE_AGENT_META_DATA_QUEUE}
     artifact_paths: "eb.zip;eb/*"
+    concurrency: 1
+    concurrency_group: backend-deploy
