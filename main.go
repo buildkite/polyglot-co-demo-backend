@@ -36,9 +36,9 @@ func main() {
 		forecastReq := ForecastRequest{
 			Locations: []ForecastRequestLocation{
 				// {"Auckland", "-36.8485", "174.7633"},
-				// {"Melbourne", "-37.8163", "144.9642"},
+				{"Melbourne", "-37.8163", "144.9642"},
 				// {"Wellington", "-41.2865", "174.7762"},
-				{"Milan", "45.4654", "9.1859"},
+				// {"Milan", "45.4654", "9.1859"},
 				// {"Shanghai", "31.2304", "121.4737"},
 				{"Kraków", "50.0647", "19.9450"},
 				// {"Tokyo", "35.6895", "139.6917"},
